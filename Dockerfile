@@ -1,4 +1,12 @@
-FROM node:16 as build
+## DEV
+FROM node:16 AS dev
+
+WORKDIR /var/www/project/frontend
+
+CMD npm start
+
+## BUILD
+FROM node:16 AS build
 
 WORKDIR /app
 
@@ -7,8 +15,9 @@ RUN npm ci
 COPY . ./
 RUN npm run build
 
-# production env
-FROM nginx:stable-alpine
+## PROD
+FROM nginx:stable-alpine AS prod
+
 COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
