@@ -26,8 +26,8 @@ $ npm build
 ## Working with CI (GitHub Actions)
 
 Before working with CI - make sure you have a production environment ready.
-In addition to the production infrastructure itself, you should have a private key 
-uploaded in this repository to communicate with the artifact registry.
+In addition to the production infrastructure itself, you should have several secret 
+variables set up in this repository to communicate with the artifact registry.
 
 For more details, see [boilerplate-infrastructure](https://github.com/rootsher/boilerplate-infrastructure).
 
