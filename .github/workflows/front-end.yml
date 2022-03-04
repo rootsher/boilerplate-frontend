@@ -13,9 +13,21 @@ jobs:
           registry: ${{ secrets.GCP_REGION }}-docker.pkg.dev
           username: _json_key
           password: ${{ secrets.GCP_KEYFILE_JSON }}
-      - name: Build and push
+      - name: Build and push artifact
         uses: docker/build-push-action@v2
         with:
           push: true
           target: prod
           tags: ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/project/frontend:latest
+      - name: GCP login
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GCP_KEYFILE_JSON }}
+      - name: GKE get credentials
+        uses: google-github-actions/get-gke-credentials@v0
+        with:
+          cluster_name: ${{ secrets.GCP_PROJECT_ID }}-gke-cluster
+          location: ${{ secrets.GCP_REGION }}
+      - name: GKE restart deployment
+        run: |
+          kubectl rollout restart deployment/frontend --namespace=project
